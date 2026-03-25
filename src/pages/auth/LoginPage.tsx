@@ -166,7 +166,7 @@ export const LoginPage: React.FC = () => {
                 </div>
                 <Input
                   label="Enter 4-digit OTP code"
-                  type="text"
+                  type="password"
                   maxLength={4}
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
