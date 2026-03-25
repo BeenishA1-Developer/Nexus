@@ -13,9 +13,10 @@ import { meetings, availabilitySlots } from '../data/meetings';
 
 interface MeetingCalendarProps {
   onScheduleMeeting?: (date: Date, time: string) => void;
+  meetings?: Meeting[];
 }
 
-export const MeetingCalendar: React.FC<MeetingCalendarProps> = ({ onScheduleMeeting }) => {
+export const MeetingCalendar: React.FC<MeetingCalendarProps> = ({ onScheduleMeeting, meetings: externalMeetings }) => {
   const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [userMeetings, setUserMeetings] = useState<Meeting[]>([]);
@@ -24,14 +25,15 @@ export const MeetingCalendar: React.FC<MeetingCalendarProps> = ({ onScheduleMeet
   useEffect(() => {
     if (user) {
       // Filter meetings where user is participant
-      const myMeetings = meetings.filter((m: Meeting) => m.participants.includes(user.id));
+      const allMeetings = externalMeetings || meetings;
+      const myMeetings = allMeetings.filter((m: Meeting) => m.participants.includes(user.id));
       setUserMeetings(myMeetings);
 
       // Filter availability for user
       const myAvailability = availabilitySlots.filter((slot: AvailabilitySlot) => slot.userId === user.id);
       setUserAvailability(myAvailability);
     }
-  }, [user]);
+  }, [user, externalMeetings]);
 
   const handleDateChange = (value: any) => {
     if (value instanceof Date) {
