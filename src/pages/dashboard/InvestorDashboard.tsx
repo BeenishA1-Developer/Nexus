@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, PieChart, Filter, Search, PlusCircle } from 'lucide-react';
+import { Users, PieChart, Filter, Search, PlusCircle, Wallet } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card, CardBody, CardHeader } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
@@ -105,8 +105,7 @@ export const InvestorDashboard: React.FC = () => {
         </div>
       </div>
       
-      {/* Stats summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="bg-primary-50 border border-primary-100">
           <CardBody>
             <div className="flex items-center">
@@ -146,6 +145,19 @@ export const InvestorDashboard: React.FC = () => {
                 <h3 className="text-xl font-semibold text-accent-900">
                   {sentRequests.filter(req => req.status === 'accepted').length}
                 </h3>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+        <Card className="bg-emerald-50 border border-emerald-100">
+          <CardBody>
+            <div className="flex items-center">
+              <div className="p-3 bg-emerald-100 rounded-full mr-4">
+                <Wallet size={20} className="text-emerald-700" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-emerald-700">Wallet Balance</p>
+                <h3 className="text-xl font-semibold text-emerald-900">$2,500,000</h3>
               </div>
             </div>
           </CardBody>

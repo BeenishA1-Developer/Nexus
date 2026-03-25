@@ -122,15 +122,36 @@ export const RegisterPage: React.FC = () => {
               startAdornment={<Mail size={18} />}
             />
             
-            <Input
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              fullWidth
-              startAdornment={<Lock size={18} />}
-            />
+            <div className="space-y-2">
+              <Input
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                fullWidth
+                startAdornment={<Lock size={18} />}
+              />
+              {password && (
+                <div className="pt-1 space-y-1">
+                  <div className="flex justify-between text-xs font-medium">
+                    <span className="text-gray-500">Security Level</span>
+                    <span className={
+                      password.length < 6 ? 'text-red-500' : 
+                      password.length < 10 ? 'text-amber-500' : 'text-green-500'
+                    }>
+                      {password.length < 6 ? 'Weak' : password.length < 10 ? 'Medium' : 'Strong'}
+                    </span>
+                  </div>
+                  <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div className={`h-full transition-all duration-300 ${
+                      password.length < 6 ? 'w-1/3 bg-red-500' : 
+                      password.length < 10 ? 'w-2/3 bg-amber-500' : 'w-full bg-green-500'
+                    }`}></div>
+                  </div>
+                </div>
+              )}
+            </div>
             
             <Input
               label="Confirm password"

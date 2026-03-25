@@ -37,6 +37,9 @@ import { MeetingsPage } from './pages/meetings/MeetingsPage';
 import { VideoCall } from './components/VideoCall';
 import { DocumentChamber } from './components/DocumentChamber';
 
+// Week 3 Features
+import { PaymentSection } from './components/PaymentSection';
+
 function App() {
   return (
     <AuthProvider>
@@ -109,6 +112,11 @@ function App() {
           
           <Route path="/document-chamber" element={<DashboardLayout />}>
             <Route index element={<DocumentChamber />} />
+          </Route>
+
+          {/* Week 3 Feature Routes */}
+          <Route path="/payments" element={<DashboardLayout />}>
+            <Route index element={<PaymentSection />} />
           </Route>
 
           {/* Redirect root to login */}

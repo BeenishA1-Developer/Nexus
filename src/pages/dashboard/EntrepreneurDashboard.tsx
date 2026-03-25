@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Bell, Calendar, TrendingUp, AlertCircle, PlusCircle } from 'lucide-react';
+import { Users, Bell, Calendar, TrendingUp, AlertCircle, PlusCircle, Wallet } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card, CardBody, CardHeader } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
@@ -15,7 +15,7 @@ import { meetings } from '../../data/meetings';
 export const EntrepreneurDashboard: React.FC = () => {
   const { user } = useAuth();
   const [collaborationRequests, setCollaborationRequests] = useState<CollaborationRequest[]>([]);
-  const [recommendedInvestors, setRecommendedInvestors] = useState(investors.slice(0, 3));
+  const [recommendedInvestors] = useState(investors.slice(0, 3));
   
   useEffect(() => {
     if (user) {
@@ -23,10 +23,8 @@ export const EntrepreneurDashboard: React.FC = () => {
       const requests = getRequestsForEntrepreneur(user.id);
       setCollaborationRequests(requests);
       
-      // Load upcoming meetings
-      const userMeetings = meetings.filter(m => 
-        m.participants.includes(user.id) && m.status === 'scheduled'
-      );
+      // For simplicity, consider all scheduled meetings as upcoming
+      // In real app, filter by future dates
       // For simplicity, consider all scheduled meetings as upcoming
       // In real app, filter by future dates
     }
@@ -67,7 +65,7 @@ export const EntrepreneurDashboard: React.FC = () => {
       </div>
       
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         <Card className="bg-primary-50 border border-primary-100">
           <CardBody>
             <div className="flex items-center">
@@ -121,6 +119,19 @@ export const EntrepreneurDashboard: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-success-700">Profile Views</p>
                 <h3 className="text-xl font-semibold text-success-900">24</h3>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+        <Card className="bg-indigo-50 border border-indigo-100">
+          <CardBody>
+            <div className="flex items-center">
+              <div className="p-3 bg-indigo-100 rounded-full mr-4">
+                <Wallet size={20} className="text-indigo-700" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-indigo-700">Wallet Balance</p>
+                <h3 className="text-xl font-semibold text-indigo-900">$45,000</h3>
               </div>
             </div>
           </CardBody>

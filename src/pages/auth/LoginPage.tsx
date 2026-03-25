@@ -11,6 +11,8 @@ export const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<UserRole>('entrepreneur');
   const [error, setError] = useState<string | null>(null);
+  const [step, setStep] = useState<1 | 2>(1);
+  const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
   const { login } = useAuth();
@@ -20,8 +22,19 @@ export const LoginPage: React.FC = () => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
+
+    if (step === 1) {
+      // Simulate checking credentials and sending OTP
+      setTimeout(() => {
+        setIsLoading(false);
+        setStep(2);
+      }, 1000);
+      return;
+    }
     
+    // Step 2: Verify OTP and Login
     try {
+      if (otp.length < 4) throw new Error('Invalid OTP. Please enter ANY 4 digits for demo (e.g. 1234).');
       await login(email, password, role);
       // Redirect based on user role
       navigate(role === 'entrepreneur' ? '/dashboard/entrepreneur' : '/dashboard/investor');
@@ -72,77 +85,105 @@ export const LoginPage: React.FC = () => {
           )}
           
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                I am a
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  className={`py-3 px-4 border rounded-md flex items-center justify-center transition-colors ${
-                    role === 'entrepreneur'
-                      ? 'border-primary-500 bg-primary-50 text-primary-700'
-                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                  }`}
-                  onClick={() => setRole('entrepreneur')}
-                >
-                  <Building2 size={18} className="mr-2" />
-                  Entrepreneur
-                </button>
+            {step === 1 ? (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    I am a
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      className={`py-3 px-4 border rounded-md flex items-center justify-center transition-colors ${
+                        role === 'entrepreneur'
+                          ? 'border-primary-500 bg-primary-50 text-primary-700'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                      onClick={() => setRole('entrepreneur')}
+                    >
+                      <Building2 size={18} className="mr-2" />
+                      Entrepreneur
+                    </button>
+                    
+                    <button
+                      type="button"
+                      className={`py-3 px-4 border rounded-md flex items-center justify-center transition-colors ${
+                        role === 'investor'
+                          ? 'border-primary-500 bg-primary-50 text-primary-700'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                      onClick={() => setRole('investor')}
+                    >
+                      <CircleDollarSign size={18} className="mr-2" />
+                      Investor
+                    </button>
+                  </div>
+                </div>
                 
-                <button
-                  type="button"
-                  className={`py-3 px-4 border rounded-md flex items-center justify-center transition-colors ${
-                    role === 'investor'
-                      ? 'border-primary-500 bg-primary-50 text-primary-700'
-                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                  }`}
-                  onClick={() => setRole('investor')}
-                >
-                  <CircleDollarSign size={18} className="mr-2" />
-                  Investor
-                </button>
-              </div>
-            </div>
-            
-            <Input
-              label="Email address"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              fullWidth
-              startAdornment={<User size={18} />}
-            />
-            
-            <Input
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              fullWidth
-            />
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                <Input
+                  label="Email address"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  fullWidth
+                  startAdornment={<User size={18} />}
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                  Remember me
-                </label>
-              </div>
+                
+                <Input
+                  label="Password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  fullWidth
+                />
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <input
+                      id="remember-me"
+                      name="remember-me"
+                      type="checkbox"
+                      className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                      Remember me
+                    </label>
+                  </div>
 
-              <div className="text-sm">
-                <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
-                  Forgot your password?
-                </a>
+                  <div className="text-sm">
+                    <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
+                      Forgot your password?
+                    </a>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="animate-fade-in space-y-4">
+                <div className="bg-primary-50 border border-primary-100 p-4 rounded-md mb-4 text-center text-primary-800 text-sm">
+                  We've sent a one-time verification code to <strong>{email}</strong>
+                </div>
+                <Input
+                  label="Enter 4-digit OTP code"
+                  type="text"
+                  maxLength={4}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
+                  required
+                  fullWidth
+                  className="text-center tracking-widest text-lg font-mono"
+                  placeholder="• • • •"
+                />
+                <div className="text-sm text-center">
+                  <p className="text-gray-500 mb-2 italic">For demo: enter any 4 numbers (e.g. 1234)</p>
+                  <button type="button" onClick={() => setStep(1)} className="text-gray-500 hover:text-gray-700 underline">
+                    Back to login
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
+
             
             <Button
               type="submit"
@@ -150,7 +191,7 @@ export const LoginPage: React.FC = () => {
               isLoading={isLoading}
               leftIcon={<LogIn size={18} />}
             >
-              Sign in
+              {step === 1 ? 'Sign in' : 'Verify OTP'}
             </Button>
           </form>
           
