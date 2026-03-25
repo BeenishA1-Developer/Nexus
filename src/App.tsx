@@ -33,6 +33,10 @@ import { ChatPage } from './pages/chat/ChatPage';
 // Meetings Pages
 import { MeetingsPage } from './pages/meetings/MeetingsPage';
 
+// Week 2 Features
+import { VideoCall } from './components/VideoCall';
+import { DocumentChamber } from './components/DocumentChamber';
+
 function App() {
   return (
     <AuthProvider>
@@ -98,6 +102,15 @@ function App() {
             <Route index element={<MeetingsPage />} />
           </Route>
           
+          {/* Week 2 Feature Routes */}
+          <Route path="/video-call" element={<DashboardLayout />}>
+            <Route index element={<VideoCall />} />
+          </Route>
+          
+          <Route path="/document-chamber" element={<DashboardLayout />}>
+            <Route index element={<DocumentChamber />} />
+          </Route>
+
           {/* Redirect root to login */}
           <Route path="/" element={<Navigate to="/login" replace />} />
           
